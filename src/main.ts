@@ -130,7 +130,7 @@ async function afficherFicheDetaillee(nom: string) {
     const pagination = document.querySelector<HTMLDivElement>('.pagination-controls')!;
 
     pagination.style.display = "none";
-    liste.innerHTML = "<div class='loading'>ACCESSING_ARCHIVES...</div>";
+    liste.innerHTML = "<div class='loading'>CHARGEMENT</div>";
 
     try {
         const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${nom}`);
