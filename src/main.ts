@@ -2,7 +2,7 @@ import './style.css'
 
 const app = document.querySelector<HTMLDivElement>('#app')
 
-// 1. Structure HTML avec la barre de recherche intégrée
+// structure html
 if (app) {
     app.innerHTML = `
     <h1>Pokedex</h1>
@@ -25,7 +25,7 @@ if (app) {
 const LIMIT = 18;
 let currentPage = 1;
 
-// --- FONCTION DE RECHERCHE ---
+// Fonction de recherche
 async function rechercherUnPokemon() {
     const input = document.querySelector<HTMLInputElement>('#search-input');
     const liste = document.querySelector<HTMLUListElement>('#pokemon-list')!;
@@ -35,7 +35,7 @@ async function rechercherUnPokemon() {
     if (!nom) return;
 
     liste.innerHTML = "Recherche en cours...";
-    // On cache la pagination pendant la recherche pour ne pas créer de confusion
+
     pagination.style.display = "none";
 
     try {
@@ -76,7 +76,7 @@ async function rechercherUnPokemon() {
     }
 }
 
-// --- FONCTION DE LISTE (PAGINATION) ---
+// Fonction pour la pagination
 async function getPokemonIndic(page: number) {
     const prevBtn = document.querySelector<HTMLButtonElement>('#prev-btn');
     const pagination = document.querySelector<HTMLDivElement>('.pagination-controls')!;
@@ -105,17 +105,65 @@ async function getPokemonIndic(page: number) {
             const pokemon = await rep.json();
 
             liste.innerHTML += `
-                <li class="pokemon-card">
-                   <span class="pokemon-name">${pokemon.name}</span>
-                  <img src="${pokemon.sprites.other['official-artwork'].front_default}" alt="${pokemon.name}" />
+                <li class="pokemon-card clickable-card" data-name="${pokemon.name}">
+                    <span class="pokemon-name">${pokemon.name}</span>
+                    <img src="${pokemon.sprites.other['official-artwork'].front_default}" alt="${pokemon.name}" />
                 </li>
             `;
         }
+        attacherEvenementsCartes();
     }
 }
 
-// --- ÉCOUTEURS D'ÉVÉNEMENTS ---
+function attacherEvenementsCartes() {
+    const cartes = document.querySelectorAll('.clickable-card');
+    cartes.forEach(carte => {
+        carte.addEventListener('click', () => {
+            const nom = carte.getAttribute('data-name');
+            if (nom) afficherFicheDetaillee(nom);
+        });
+    });
+}
 
+async function afficherFicheDetaillee(nom: string) {
+    const liste = document.querySelector<HTMLUListElement>('#pokemon-list')!;
+    const pagination = document.querySelector<HTMLDivElement>('.pagination-controls')!;
+
+    pagination.style.display = "none";
+    liste.innerHTML = "<div class='loading'>ACCESSING_ARCHIVES...</div>";
+
+    try {
+        const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${nom}`);
+        const pokemon = await res.json();
+
+        // Calcul des stats pour une barre de progression (optionnel)
+        const statsHtml = pokemon.stats.map((s: any) => `
+            <div class="stat-row">
+                <span>${s.stat.name.toUpperCase()}</span>
+                <div class="stat-bar"><div style="width: ${s.base_stat}%"></div></div>
+                <span>${s.base_stat}</span>
+            </div>
+        `).join('');
+
+        liste.innerHTML = `
+            <li class="pokemon-card detail-view">
+                <div class="detail-header">
+                    <span class="pokemon-name">ID_${pokemon.id.toString().padStart(3, '0')} // ${pokemon.name}</span>
+                </div>
+                <img src="${pokemon.sprites.other['official-artwork'].front_default}" />
+                <div class="card-info">
+                    <p>> TYPE: ${pokemon.types.map((t: any) => t.type.name).join(' / ')}</p>
+                    <p>> HEIGHT: ${pokemon.height / 10}M | WEIGHT: ${pokemon.weight / 10}KG</p>
+                    <div class="stats-container">
+                        ${statsHtml}
+                    </div>
+                </div>
+                <button onclick="location.reload()" class="back-btn">Retour à la liste</button>
+            </li>`;
+    } catch (error) {
+        liste.innerHTML = "<div class='error-box'>FATAL_ERROR: DATA_CORRUPT</div>";
+    }
+}
 // Pagination
 document.querySelector('#prev-btn')?.addEventListener('click', () => {
     if (currentPage > 1) {

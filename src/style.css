@@ -185,3 +185,45 @@ h1 {
 .back-btn { background: var(--cb-pink) !important; color: white !important; margin-top: 20px; }
 
 @media (max-width: 800px) { #pokemon-list { grid-template-columns: 1fr; } }
+.clickable-card {
+    cursor: pointer;
+}
+
+.detail-view {
+    grid-column: 1 / -1; /* Prend toute la largeur */
+    max-width: 600px;
+    margin: 0 auto;
+    border: 2px solid var(--cb-yellow) !important;
+    background: rgba(0, 0, 0, 0.9) !important;
+}
+
+.stats-container {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.stat-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-size: 0.6rem;
+}
+
+.stat-bar {
+    flex-grow: 1;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--cb-blue);
+}
+
+.stat-bar div {
+    height: 100%;
+    background: var(--cb-blue);
+    box-shadow: 0 0 10px var(--cb-blue);
+}
+
+.detail-view img {
+    width: 250px !important;
+    filter: drop-shadow(0 0 20px var(--cb-blue));
+}
