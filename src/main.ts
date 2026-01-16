@@ -14,10 +14,16 @@ if (app) {
     </div>
   `
 }
-const LIMIT = 20;
+const LIMIT = 18;
 let currentPage = 1;
 
 async function getPokemonIndic(page: number) {
+    const prevBtn = document.querySelector<HTMLButtonElement>('#prev-btn');
+
+    if (prevBtn) {
+        // Désactive le bouton si on est sur la page 1
+        prevBtn.disabled = (page === 1);
+    }
     const liste = document.querySelector<HTMLUListElement>('#pokemon-list')!;
     const indicator = document.querySelector<HTMLSpanElement>('#page-indicator')!;
 
