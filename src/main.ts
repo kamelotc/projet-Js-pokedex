@@ -61,4 +61,3 @@ document.querySelector('#next-btn')?.addEventListener('click', () => {
 
 // Premier chargement
 getPokemonIndic(currentPage);
-getPokemonIndic()
