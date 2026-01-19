@@ -36,7 +36,7 @@ export async function getPokemonIndic(page: number, LIMIT=18) {
         attacherEvenementsCartes();
     }
 }
-function attacherEvenementsCartes() {
+export function attacherEvenementsCartes() {
     // On récupère toutes les cartes qui viennent d'être créer
     const cartes = document.querySelectorAll('.clickable-card');
     cartes.forEach(carte => {
