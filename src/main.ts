@@ -91,7 +91,7 @@ document.querySelector('#next-btn')?.addEventListener('click', () => {
 
 // Recherche (Clic bouton et Touche Entrée)
 document.querySelector('#search-btn')?.addEventListener('click', rechercherUnPokemon);
-document.querySelector('#search-input')?.addEventListener('keypress', (e:KeyboardEvent) => {
+document.querySelector<HTMLInputElement>('#search-input')?.addEventListener('keypress', (e:KeyboardEvent) => {
     if (e.key === 'Enter') rechercherUnPokemon();
 });
 
