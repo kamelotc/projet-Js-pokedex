@@ -19,6 +19,15 @@ export async function getPokemonIndic(page: number, LIMIT=18) {
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${LIMIT}`);
     const catalogue = await response.json();
 
+    const totalPokemon = catalogue.count;
+    genererPagination(page, LIMIT, totalPokemon);
+
+    const nextBtn = document.querySelector<HTMLButtonElement>('#next-btn');
+    const maxPages = Math.ceil(totalPokemon / LIMIT);
+    if (nextBtn) {
+        nextBtn.disabled = (page >= maxPages);
+    }
+
     liste.innerHTML = "";
 
     if (liste) {
@@ -36,6 +45,54 @@ export async function getPokemonIndic(page: number, LIMIT=18) {
         attacherEvenementsCartes();
     }
 }
+function genererPagination(page: number, LIMIT: number, totalPokemon: number) {
+    const conteneur = document.querySelector<HTMLDivElement>('#pagination-numbers');
+    if (!conteneur) return;
+
+    conteneur.innerHTML= ``;
+    const totalPages = Math.ceil(totalPokemon / LIMIT);
+    const creeBtn = (numPage: number) => {
+        const btn = document.createElement('button');
+        btn.innerText = numPage.toString();
+        btn.className = 'btn-primary';
+
+        if (numPage === page) {
+            btn.classList.add('active');
+            btn.disabled = true;
+        }
+        btn.addEventListener('click', () => {
+            getPokemonIndic(numPage);
+        });
+        conteneur.appendChild(btn);
+    }
+    creeBtn(1);
+    if (page>3){
+        const span = document.createElement('span');
+        span.innerText = `...`;
+        conteneur.appendChild(span);
+    }
+    let debut = Math.max(2, page -1);
+    let fin = Math.min(totalPages -1, page +1)
+
+    if (page === 1 )fin = Math.min(totalPages - 1,3);
+    if (page === totalPages) debut = Math.max(2, totalPages - 2);
+
+    for (let i = debut; i <= fin; i++) {
+        creeBtn(i);
+    }
+
+    if (page < totalPages -2){
+        const span = document.createElement('span');
+        span.innerText = `...`;
+        conteneur.appendChild(span);
+    }
+
+    if (totalPages > 1){
+        creeBtn(totalPages);
+    }
+
+}
+
 export function attacherEvenementsCartes() {
     // On récupère toutes les cartes qui viennent d'être créer
     const cartes = document.querySelectorAll('.clickable-card');
