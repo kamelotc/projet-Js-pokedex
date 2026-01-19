@@ -10,7 +10,7 @@ export async function afficherFicheDetaillee(nom: string) {
     try {
         const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${nom}`);
         const pokemon = await res.json();
-
+        const criUrl = pokemon.cries.latest;
         // Calcul des stats pour une barre de progression (optionnel)
         const statsHtml = pokemon.stats.map((s: any) => `
             <div class="stat-row">
@@ -32,6 +32,9 @@ export async function afficherFicheDetaillee(nom: string) {
                     <div class="stats-container">
                         ${statsHtml}
                     </div>
+                    <button onclick="new Audio('${criUrl}').play()" class="cry-btn">
+                        🔊 Écouter le cri
+                    </button>
                 </div>
                 <button onclick="location.reload()" class="back-btn">Retour à la liste</button>
             </li>`;
