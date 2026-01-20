@@ -1,5 +1,4 @@
 
-
 export async function afficherFicheDetaillee(nom: string) {
     const liste = document.querySelector<HTMLUListElement>('#pokemon-list')!;
     const pagination = document.querySelector<HTMLDivElement>('.pagination-controls')!;
