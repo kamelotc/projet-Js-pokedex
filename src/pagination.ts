@@ -10,16 +10,16 @@ export async function getPokemonIndic(page: number, LIMIT=18) {
     }
 
     const liste = document.querySelector<HTMLUListElement>('#pokemon-list')!;
-    const indicator = document.querySelector<HTMLSpanElement>('#page-indicator')!;
+    //const indicator = document.querySelector<HTMLSpanElement>('#page-indicator')!;
 
     const offset = (page - 1) * LIMIT;
     liste.innerHTML = "Chargement...";
-    indicator.innerText = `Page ${page}`;
+    //indicator.innerText = `Page ${page}`;
 
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${LIMIT}`);
     const catalogue = await response.json();
 
-    const totalPokemon = catalogue.count;
+    const totalPokemon = Math.min(catalogue.count, 1025);
     genererPagination(page, LIMIT, totalPokemon);
 
     const nextBtn = document.querySelector<HTMLButtonElement>('#next-btn');
@@ -38,7 +38,7 @@ export async function getPokemonIndic(page: number, LIMIT=18) {
             liste.innerHTML += `
                 <li class="pokemon-card clickable-card" data-name="${pokemon.name}">
                     <span class="pokemon-name">${pokemon.name}</span>
-                    <img src="${pokemon.sprites.other['official-artwork'].front_default}" alt="${pokemon.name}" />
+                    <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}" />
                 </li>
             `;
         }
