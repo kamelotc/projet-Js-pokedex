@@ -1,5 +1,5 @@
 import { attacherEvenementsCartes } from './pagination.ts';
-//import {gestionPagination} from './main.ts'
+
 export async function rechercherUnPokemon() {
     const input = document.querySelector<HTMLInputElement>('#search-input');
     const liste = document.querySelector<HTMLUListElement>('#pokemon-list')!;
