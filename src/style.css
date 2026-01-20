@@ -116,8 +116,18 @@ h1 {
 }
 
 .pokemon-name {
-    background: var(--cb-blue); color: var(--cb-dark); font-size: 0.8rem;
-    padding: 4px 10px; font-weight: 900; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+        background: var(--cb-blue);
+        color: var(--cb-dark);
+        font-size: 0.8rem;
+        padding: 6px 15px;
+        font-weight: 900;
+        display: inline-block;
+        position: relative;
+        z-index: 10;
+        clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+        opacity: 1 !important;
+        visibility: visible !important;
+        text-shadow: none;
 }
 
 .pokemon-card img { width: 140px; filter: drop-shadow(0 0 8px var(--cb-blue)); }
@@ -226,6 +236,37 @@ h1 {
 .detail-view img {
     width: 250px !important;
     filter: drop-shadow(0 0 20px var(--cb-blue));
+}
+
+/* Container de pagination */
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap; /* Pour que ça passe sur mobile */
+}
+
+/* Les petits boutons numérotés */
+.page-btn {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+/* La page active (en bleu par exemple) */
+.page-btn.active {
+    background-color: #3b4cca; /* Bleu Pokémon */
+    color: white;
+    border-color: #3b4cca;
+    font-weight: bold;
+}
+
+.page-btn:hover:not(.active) {
+    background-color: #e0e0e0;
 }
 
 .cry-btn {

@@ -15,12 +15,13 @@ if (app) {
     </div>
 
     <ul id="pokemon-list"></ul>
-
+    
     <div class="pagination-controls">
         <button id="prev-btn">Précédent</button>
-        <span id="page-indicator">Page 1</span>
+        <div id="pagination-numbers" class="pagination-numbers"></div>
         <button id="next-btn">Suivant</button>
     </div>
+
   `
 }
 
@@ -51,4 +52,6 @@ let currentPage =1;
 
 rechercherUnPokemon();
 
+
+// Premier chargement
 getPokemonIndic(currentPage);
