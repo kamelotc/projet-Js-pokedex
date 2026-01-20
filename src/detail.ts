@@ -24,7 +24,7 @@ export async function afficherFicheDetaillee(nom: string) {
                 <div class="detail-header">
                     <span class="pokemon-name">ID_${pokemon.id.toString().padStart(3, '0')} // ${pokemon.name}</span>
                 </div>
-                <img src="${pokemon.sprites.front_default}" />
+                <img src="${pokemon.sprites.other['official-artwork'].front_default}" </img>
                 <div class="card-info">
                     <p>> TYPE: ${pokemon.types.map((t: any) => t.type.name).join(' / ')}</p>
                     <p>> HEIGHT: ${pokemon.height / 10}M | WEIGHT: ${pokemon.weight / 10}KG</p>
