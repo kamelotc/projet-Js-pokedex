@@ -1,4 +1,6 @@
 import {afficherFicheDetaillee} from  './detail.ts'
+//import {listeApiPokemon} from "./api.ts";
+
 export async function getPokemonIndic(page: number, LIMIT=18) {
     const prevBtn = document.querySelector<HTMLButtonElement>('#prev-btn');
     const pagination = document.querySelector<HTMLDivElement>('.pagination-controls')!;
@@ -10,11 +12,8 @@ export async function getPokemonIndic(page: number, LIMIT=18) {
     }
 
     const liste = document.querySelector<HTMLUListElement>('#pokemon-list')!;
-    //const indicator = document.querySelector<HTMLSpanElement>('#page-indicator')!;
-
     const offset = (page - 1) * LIMIT;
-    liste.innerHTML = "Chargement...";
-    //indicator.innerText = `Page ${page}`;
+    liste.innerHTML = "Chargement..."
 
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${LIMIT}`);
     const catalogue = await response.json();
@@ -37,7 +36,7 @@ export async function getPokemonIndic(page: number, LIMIT=18) {
 
             liste.innerHTML += `
                 <li class="pokemon-card clickable-card" data-name="${pokemon.name}">
-                    <span class="pokemon-name">${pokemon.name}</span>
+                    <div class="pokemon-name">${pokemon.name}</div>
                     <img src="${pokemon.sprites.other['official-artwork'].front_default}" alt="${pokemon.name}" />
                 </li>
             `;

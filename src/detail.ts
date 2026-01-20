@@ -13,16 +13,16 @@ export async function afficherFicheDetaillee(nom: string) {
         // Calcul des stats pour une barre de progression (optionnel)
         const statsHtml = pokemon.stats.map((s: any) => `
             <div class="stat-row">
-                <span>${s.stat.name.toUpperCase()}</span>
+                <div>${s.stat.name.toUpperCase()}</div>
                 <div class="stat-bar"><div style="width: ${s.base_stat}%"></div></div>
-                <span>${s.base_stat}</span>
+                <div>${s.base_stat}</div>
             </div>
         `).join('');
 
         liste.innerHTML = `
             <li class="pokemon-card detail-view">
                 <div class="detail-header">
-                    <span class="pokemon-name">ID_${pokemon.id.toString().padStart(3, '0')} // ${pokemon.name}</span>
+                    <div class="pokemon-name">ID_${pokemon.id.toString().padStart(3, '0')} // ${pokemon.name}</div>
                 </div>
                 <img src="${pokemon.sprites.other['official-artwork'].front_default}" </img>
                 <div class="card-info">

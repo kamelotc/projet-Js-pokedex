@@ -24,12 +24,11 @@ export async function rechercherUnPokemon() {
         // 1. On injecte le HTML
         liste.innerHTML = `
             <li class="pokemon-card clickable-card" data-name="${pokemon.name}">
-                <span class="pokemon-name">${pokemon.name}</span>
+                <div class="pokemon-name">${pokemon.name}</div>
                 <img src="${pokemon.sprites.other['official-artwork'].front_default}" alt="${pokemon.name}" />
                 <button id="back-btn" class="back-btn">← Retour à la liste</button>
             </li>
         `;
-
         // 2. CRUCIAL : On appelle la fonction ICI, une fois que la carte est dans le DOM
         attacherEvenementsCartes();
 
