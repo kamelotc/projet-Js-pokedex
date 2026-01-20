@@ -25,27 +25,30 @@ if (app) {
 }
 
 //const LIMIT = 18;
-let currentPage = 1;
+let currentPage =1;
 // Pagination
-document.querySelector('#prev-btn')?.addEventListener('click', () => {
-    if (currentPage > 1) {
-        currentPage--;
-        getPokemonIndic(currentPage);
-    }
-});
 
-document.querySelector('#next-btn')?.addEventListener('click', () => {
-    currentPage++;
-    getPokemonIndic(currentPage);
-});
+
+
+    document.querySelector('#prev-btn')?.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            getPokemonIndic(currentPage);
+        }
+    });
+
+    document.querySelector('#next-btn')?.addEventListener('click', () => {
+        currentPage++;
+        getPokemonIndic(currentPage);
+    });
 
 // Recherche (Clic bouton et Touche Entrée)
-document.querySelector('#search-btn')?.addEventListener('click', rechercherUnPokemon);
-document.querySelector<HTMLInputElement>('#search-input')?.addEventListener('keypress', (e:KeyboardEvent) => {
-    if (e.key === 'Enter') rechercherUnPokemon();
-});
+    document.querySelector('#search-btn')?.addEventListener('click', rechercherUnPokemon);
+    document.querySelector<HTMLInputElement>('#search-input')?.addEventListener('keypress', (e:KeyboardEvent) => {
+        if (e.key === 'Enter') rechercherUnPokemon();
+    });
 
 
 rechercherUnPokemon();
-// Premier chargement
+
 getPokemonIndic(currentPage);

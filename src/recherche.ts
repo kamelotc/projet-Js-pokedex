@@ -1,5 +1,5 @@
 import { attacherEvenementsCartes } from './pagination.ts';
-
+//import {gestionPagination} from './main.ts'
 export async function rechercherUnPokemon() {
     const input = document.querySelector<HTMLInputElement>('#search-input');
     const liste = document.querySelector<HTMLUListElement>('#pokemon-list')!;
@@ -21,19 +21,16 @@ export async function rechercherUnPokemon() {
 
         const pokemon = await response.json();
 
-        // 1. On injecte le HTML
         liste.innerHTML = `
             <li class="pokemon-card clickable-card" data-name="${pokemon.name}">
                 <span class="pokemon-name">${pokemon.name}</span>
-                <img src="${pokemon.sprites.other['official-artwork'].front_default}" alt="${pokemon.name}" />
+                <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}" />
                 <button id="back-btn" class="back-btn">← Retour à la liste</button>
             </li>
         `;
 
-        // 2. CRUCIAL : On appelle la fonction ICI, une fois que la carte est dans le DOM
         attacherEvenementsCartes();
 
-        // Gestion du bouton retour
         document.querySelector('#back-btn')?.addEventListener('click', () => {
             location.reload();
         });

@@ -29,7 +29,7 @@ export async function getPokemonIndic(page: number, LIMIT=18) {
             liste.innerHTML += `
                 <li class="pokemon-card clickable-card" data-name="${pokemon.name}">
                     <span class="pokemon-name">${pokemon.name}</span>
-                    <img src="${pokemon.sprites.other['official-artwork'].front_default}" alt="${pokemon.name}" />
+                    <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}" />
                 </li>
             `;
         }
