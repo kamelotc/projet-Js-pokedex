@@ -24,9 +24,6 @@ export async function rechercherUnPokemon() {
         liste.innerHTML = `
             <li class="pokemon-card clickable-card" data-name="${pokemon.name}">
                 <span class="pokemon-name">${pokemon.name}</span>
-                <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}" />
-                <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}" />
-                
                 <img src="${pokemon.sprites.other['official-artwork'].front_default}" alt="${pokemon.name}" />
                 <button id="back-btn" class="back-btn">← Retour à la liste</button>
             </li>
