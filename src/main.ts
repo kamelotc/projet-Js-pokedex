@@ -2,7 +2,7 @@ import './style.css'
 import { getPokemonIndic } from './pagination.ts'
 import {  rechercherUnPokemon} from './recherche.ts'
 
-const LIMIT = 18;
+//const LIMIT = 18;
 let currentPage = 1;
 
 

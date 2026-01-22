@@ -1,4 +1,5 @@
-import { attacherEvenementsCartes } from './pagination.ts';
+import { attacherEvenementsCartes } from './pagination.ts'
+import {fetchNomPokemon} from './api.ts'
 
 export async function rechercherUnPokemon() {
     const input = document.querySelector<HTMLInputElement>('#search-input');
@@ -12,14 +13,8 @@ export async function rechercherUnPokemon() {
     pagination.style.display = "none";
 
     try {
-        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${nom}`);
+        const pokemon = await fetchNomPokemon(nom);
 
-        if (!response.ok) {
-            // ... (ton code d'erreur reste le même)
-            return;
-        }
-
-        const pokemon = await response.json();
 
         // 1. On injecte le HTML
         liste.innerHTML = `
@@ -29,7 +24,7 @@ export async function rechercherUnPokemon() {
                 <button id="back-btn" class="back-btn">← Retour à la liste</button>
             </li>
         `;
-        // 2. CRUCIAL : On appelle la fonction ICI, une fois que la carte est dans le DOM
+        // Appelle la fonction, une fois que la carte est dans le DOM
         attacherEvenementsCartes();
 
         // Gestion du bouton retour

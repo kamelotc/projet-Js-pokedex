@@ -1,3 +1,4 @@
+import {fetchNomPokemonDetail} from './api.ts'
 
 export async function afficherFicheDetaillee(nom: string) {
     const liste = document.querySelector<HTMLUListElement>('#pokemon-list')!;
@@ -7,8 +8,9 @@ export async function afficherFicheDetaillee(nom: string) {
     liste.innerHTML = "<div class='loading'>CHARGEMENT</div>";
 
     try {
-        const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${nom}`);
-        const pokemon = await res.json();
+        const pokemon  = await fetchNomPokemonDetail(nom);
+        //const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${nom}`);
+        //const pokemon = await res.json();
         const criUrl = pokemon.cries.latest;
         // Calcul des stats pour une barre de progression (optionnel)
         const statsHtml = pokemon.stats.map((s: any) => `

@@ -1,10 +1,20 @@
-const urlApi ='http://pokeapi.co/api/v2/pokemon';
-
-
-//pour liste pokemon
+//liste pokemon
 export async function fetchListePokemon(offset: number, limit: number) {
     try {
-        const response = await fetch(`${urlApi}/?offset=${offset}&limit=${limit}`);
+        const catalogue = await fetch(`https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${limit}`);
+        if (!catalogue.ok) throw new Error('Erreur réseau');
+        return await catalogue.json();
+    } catch (error) {
+        console.error("Erreur API Liste:", error);
+        throw error;
+    }
+}
+
+
+//pour un pokemon recherche
+export async function fetchNomPokemon(nom: string) {
+    try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${nom}`);
         if (!response.ok) throw new Error('Erreur réseau');
         return await response.json();
     } catch (error) {
@@ -13,18 +23,14 @@ export async function fetchListePokemon(offset: number, limit: number) {
     }
 }
 
-
-//pour un pokemon
-export async function listeApiPokemonrecherche(nom: string) {
+//pour un pokemon detail
+export async function fetchNomPokemonDetail(nom: string) {
     try {
-        const reponse = await fetch(`${nom}/pokemonrecherche`, {})
+        const reponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${nom}`);
+        if (!reponse.ok) throw new Error('Erreur réseau');
+        return await reponse.json();
+    } catch (error){
+        console.error("Erreur API Liste:", error);
+        throw error;
     }
-
-
 }
-
-const response = await fetch(`https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${LIMIT}`);
-
-const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${nom}`);
-
-const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${nom}`);

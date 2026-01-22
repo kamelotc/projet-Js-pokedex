@@ -1,5 +1,5 @@
 import {afficherFicheDetaillee} from  './detail.ts'
-//import {listeApiPokemon} from "./api.ts";
+import {fetchListePokemon} from './api.ts'
 
 export async function getPokemonIndic(page: number, LIMIT=18) {
     const prevBtn = document.querySelector<HTMLButtonElement>('#prev-btn');
@@ -12,11 +12,11 @@ export async function getPokemonIndic(page: number, LIMIT=18) {
     }
 
     const liste = document.querySelector<HTMLUListElement>('#pokemon-list')!;
-    const offset = (page - 1) * LIMIT;
     liste.innerHTML = "Chargement..."
 
-    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${LIMIT}`);
-    const catalogue = await response.json();
+    const offset = (page - 1) * LIMIT;
+    const catalogue = await fetchListePokemon(offset, LIMIT);
+
 
     const totalPokemon = Math.min(catalogue.count, 1025);
     genererPagination(page, LIMIT, totalPokemon);
