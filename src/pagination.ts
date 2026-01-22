@@ -26,7 +26,6 @@ export async function getPokemonIndic(page: number, LIMIT=18) {
         prevBtn.disabled = (page === 1);
     }
 
-    const liste = document.querySelector<HTMLUListElement>('#pokemon-list')!;
     liste.innerHTML = "Chargement..."
 
     const offset = (page - 1) * LIMIT;

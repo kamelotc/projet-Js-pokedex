@@ -1,7 +1,7 @@
 import {attacherEvenementsCartes, getPokemonIndic,currentPage} from './pagination.ts';
 import {fetchNomPokemon} from './api.ts'
 
-export async function rechercherUnPokemon(page: number) {
+export async function rechercherUnPokemon() {
     const input = document.querySelector<HTMLInputElement>('#search-input');
     const liste = document.querySelector<HTMLUListElement>('#pokemon-list')!;
     const pagination = document.querySelector<HTMLDivElement>('.pagination-controls')!;
