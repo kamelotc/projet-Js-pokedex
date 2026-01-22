@@ -1,20 +1,31 @@
+// pagination.ts
 import {afficherFicheDetaillee} from  './detail.ts'
+import {rechercherUnPokemon} from "./recherche.ts";
+
+// --- AJOUT : On exporte currentPage pour pouvoir l'utiliser dans detail.ts ---
+export let currentPage = 1;
+
 export async function getPokemonIndic(page: number, LIMIT=18) {
+    currentPage = page; // Mise à jour de la page courante
+
     const prevBtn = document.querySelector<HTMLButtonElement>('#prev-btn');
     const pagination = document.querySelector<HTMLDivElement>('.pagination-controls')!;
+    const liste = document.querySelector<HTMLUListElement>('#pokemon-list')!;
+    const detail = document.querySelector<HTMLUListElement>('#pokemon-detail')!; // Sélecteur du détail
 
-    pagination.style.display = "flex"; // On s'assure que la pagination est visible
+    // --- MODIFICATION ICI : GESTION DE L'AFFICHAGE ---
+    if(liste) liste.style.display = "grid";   // On réaffiche la grille
+    if(detail) detail.style.display = "none"; // On cache le détail
+    if(detail) detail.innerHTML = "";         // On nettoie le détail précédent
+    if(pagination) pagination.style.display = "flex";
+    // --------------------------------------------------
 
     if (prevBtn) {
         prevBtn.disabled = (page === 1);
     }
 
-    const liste = document.querySelector<HTMLUListElement>('#pokemon-list')!;
-    //const indicator = document.querySelector<HTMLSpanElement>('#page-indicator')!;
-
     const offset = (page - 1) * LIMIT;
     liste.innerHTML = "Chargement...";
-    //indicator.innerText = `Page ${page}`;
 
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${LIMIT}`);
     const catalogue = await response.json();
@@ -45,6 +56,7 @@ export async function getPokemonIndic(page: number, LIMIT=18) {
         attacherEvenementsCartes();
     }
 }
+
 function genererPagination(page: number, LIMIT: number, totalPokemon: number) {
     const conteneur = document.querySelector<HTMLDivElement>('#pagination-numbers');
     if (!conteneur) return;
@@ -90,22 +102,37 @@ function genererPagination(page: number, LIMIT: number, totalPokemon: number) {
     if (totalPages > 1){
         creeBtn(totalPages);
     }
-
 }
 
 export function attacherEvenementsCartes() {
-    // On récupère toutes les cartes qui viennent d'être créer
     const cartes = document.querySelectorAll('.clickable-card');
     cartes.forEach(carte => {
         carte.addEventListener('click', () => {
-            // Récupère le nom stocker dans 'data-name'
             const nom = carte.getAttribute('data-name');
-            // appelle la fonction pour afficher le nom
             if (nom) afficherFicheDetaillee(nom);
         });
     });
 }
 
+export function retourListe() {
+    document.querySelector('#prev-btn')?.addEventListener('click', () => {
+        if (currentPage > 1) {
+            getPokemonIndic(currentPage - 1); // Correction ici pour utiliser l'argument
+        }
+    });
 
+    document.querySelector('#next-btn')?.addEventListener('click', () => {
+        getPokemonIndic(currentPage + 1); // Correction ici
+    });
 
+    document.querySelector('#search-btn')?.addEventListener('click', () => {
+        // currentPage = 0; // Pas nécessaire de changer currentPage global ici
+        rechercherUnPokemon(0)
+    });
 
+    document.querySelector<HTMLInputElement>('#search-input')?.addEventListener('keypress', (e:KeyboardEvent) => {
+        if (e.key === 'Enter') rechercherUnPokemon(0);
+    });
+
+    getPokemonIndic(currentPage);
+}

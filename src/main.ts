@@ -1,6 +1,6 @@
 import './style.css'
-import { getPokemonIndic } from './pagination.ts'
-import {  rechercherUnPokemon} from './recherche.ts'
+import {retourListe} from "./pagination.ts";
+
 
 const app = document.querySelector<HTMLDivElement>('#app')
 
@@ -15,43 +15,12 @@ if (app) {
     </div>
 
     <ul id="pokemon-list"></ul>
-    
+    <ul id="pokemon-detail"></ul>
     <div class="pagination-controls">
         <button id="prev-btn">Précédent</button>
         <div id="pagination-numbers" class="pagination-numbers"></div>
         <button id="next-btn">Suivant</button>
     </div>
-
   `
+    retourListe()
 }
-
-//const LIMIT = 18;
-let currentPage =1;
-// Pagination
-
-
-
-    document.querySelector('#prev-btn')?.addEventListener('click', () => {
-        if (currentPage > 1) {
-            currentPage--;
-            getPokemonIndic(currentPage);
-        }
-    });
-
-    document.querySelector('#next-btn')?.addEventListener('click', () => {
-        currentPage++;
-        getPokemonIndic(currentPage);
-    });
-
-// Recherche (Clic bouton et Touche Entrée)
-    document.querySelector('#search-btn')?.addEventListener('click', rechercherUnPokemon);
-    document.querySelector<HTMLInputElement>('#search-input')?.addEventListener('keypress', (e:KeyboardEvent) => {
-        if (e.key === 'Enter') rechercherUnPokemon();
-    });
-
-
-rechercherUnPokemon();
-
-
-// Premier chargement
-getPokemonIndic(currentPage);

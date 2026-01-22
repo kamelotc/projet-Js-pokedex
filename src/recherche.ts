@@ -1,6 +1,6 @@
-import { attacherEvenementsCartes } from './pagination.ts';
+import {attacherEvenementsCartes, getPokemonIndic,currentPage} from './pagination.ts';
 
-export async function rechercherUnPokemon() {
+export async function rechercherUnPokemon(page: number) {
     const input = document.querySelector<HTMLInputElement>('#search-input');
     const liste = document.querySelector<HTMLUListElement>('#pokemon-list')!;
     const pagination = document.querySelector<HTMLDivElement>('.pagination-controls')!;
@@ -15,7 +15,7 @@ export async function rechercherUnPokemon() {
         const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${nom}`);
 
         if (!response.ok) {
-            // ... (ton code d'erreur reste le même)
+            liste.innerHTML ="Pokémon non trouvé."
             return;
         }
 
@@ -32,7 +32,7 @@ export async function rechercherUnPokemon() {
         attacherEvenementsCartes();
 
         document.querySelector('#back-btn')?.addEventListener('click', () => {
-            location.reload();
+            getPokemonIndic(currentPage);
         });
 
     } catch (error) {
