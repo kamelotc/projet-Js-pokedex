@@ -1,18 +1,26 @@
 import {fetchNomPokemonDetail} from './api.ts'
+// detail.ts
+import { getPokemonIndic, currentPage } from "./pagination";
 
 export async function afficherFicheDetaillee(nom: string) {
     const liste = document.querySelector<HTMLUListElement>('#pokemon-list')!;
     const pagination = document.querySelector<HTMLDivElement>('.pagination-controls')!;
+    const detail = document.querySelector<HTMLUListElement>('#pokemon-detail')!;
+
 
     pagination.style.display = "none";
-    liste.innerHTML = "<div class='loading'>CHARGEMENT</div>";
+    liste.style.display = "none";
+    detail.style.display = "block";
+
+
+    detail.innerHTML = "<div class='loading'>CHARGEMENT</div>";
 
     try {
         const pokemon  = await fetchNomPokemonDetail(nom);
         //const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${nom}`);
         //const pokemon = await res.json();
         const criUrl = pokemon.cries.latest;
-        // Calcul des stats pour une barre de progression (optionnel)
+
         const statsHtml = pokemon.stats.map((s: any) => `
             <div class="stat-row">
                 <div>${s.stat.name.toUpperCase()}</div>
@@ -21,25 +29,45 @@ export async function afficherFicheDetaillee(nom: string) {
             </div>
         `).join('');
 
-        liste.innerHTML = `
+
+        detail.innerHTML = `
             <li class="pokemon-card detail-view">
                 <div class="detail-header">
                     <div class="pokemon-name">ID_${pokemon.id.toString().padStart(3, '0')} // ${pokemon.name}</div>
                 </div>
-                <img src="${pokemon.sprites.other['official-artwork'].front_default}" </img>
+                <img src="${pokemon.sprites.other['official-artwork'].front_default}" />
                 <div class="card-info">
                     <p>> TYPE: ${pokemon.types.map((t: any) => t.type.name).join(' / ')}</p>
                     <p>> HEIGHT: ${pokemon.height / 10}M | WEIGHT: ${pokemon.weight / 10}KG</p>
                     <div class="stats-container">
                         ${statsHtml}
                     </div>
-                    <button onclick="new Audio('${criUrl}').play()" class="cry-btn">
+                    <button id="play-cry" class="cry-btn">
                         🔊 Écouter le cri
                     </button>
                 </div>
-                <button onclick="location.reload()" class="back-btn">Retour à la liste</button>
+                <button id="btn-retour-liste" class="back-btn">Retour à la liste</button>
             </li>`;
+
+
+        const backBtn = document.getElementById('btn-retour-liste');
+        if (backBtn) {
+            backBtn.addEventListener('click', () => {
+                // On rappelle la fonction principale qui va réafficher la liste et cacher le détail
+                getPokemonIndic(currentPage);
+            });
+        }
+
+
+        const cryBtn = document.getElementById('play-cry');
+        if (cryBtn) {
+            cryBtn.addEventListener('click', () => {
+                new Audio(criUrl).play();
+            });
+        }
+
     } catch (error) {
-        liste.innerHTML = "<div class='error-box'>FATAL_ERROR: DATA_CORRUPT</div>";
+        detail.innerHTML = "<div class='error-box'>FATAL_ERROR: DATA_CORRUPT</div>";
+        console.error(error);
     }
 }

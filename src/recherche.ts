@@ -1,7 +1,7 @@
-import { attacherEvenementsCartes } from './pagination.ts'
+import {attacherEvenementsCartes, getPokemonIndic,currentPage} from './pagination.ts';
 import {fetchNomPokemon} from './api.ts'
 
-export async function rechercherUnPokemon() {
+export async function rechercherUnPokemon(page: number) {
     const input = document.querySelector<HTMLInputElement>('#search-input');
     const liste = document.querySelector<HTMLUListElement>('#pokemon-list')!;
     const pagination = document.querySelector<HTMLDivElement>('.pagination-controls')!;
@@ -16,7 +16,6 @@ export async function rechercherUnPokemon() {
         const pokemon = await fetchNomPokemon(nom);
 
 
-        // 1. On injecte le HTML
         liste.innerHTML = `
             <li class="pokemon-card clickable-card" data-name="${pokemon.name}">
                 <div class="pokemon-name">${pokemon.name}</div>
@@ -27,9 +26,8 @@ export async function rechercherUnPokemon() {
         // Appelle la fonction, une fois que la carte est dans le DOM
         attacherEvenementsCartes();
 
-        // Gestion du bouton retour
         document.querySelector('#back-btn')?.addEventListener('click', () => {
-            location.reload();
+            getPokemonIndic(currentPage);
         });
 
     } catch (error) {
