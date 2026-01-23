@@ -6,7 +6,6 @@ export async function fetchListePokemon(offset: number, limit: number) {
         return await catalogue.json();
     } catch (error) {
         console.error("Erreur API Liste:", error);
-        throw error;
     }
 }
 
@@ -19,7 +18,6 @@ export async function fetchNomPokemon(nom: string) {
         return await response.json();
     } catch (error) {
         console.error("Erreur API Liste:", error);
-        throw error;
     }
 }
 
@@ -29,8 +27,7 @@ export async function fetchTousLesPokemons() {
         if (!response.ok) throw new Error('Erreur réseau');
         return await response.json();
     } catch (error) {
-        console.error("Erreur API Global:", error);
-        throw error;
+        console.error("Erreur de récupération depuis L'API", error);
     }
 }
 
