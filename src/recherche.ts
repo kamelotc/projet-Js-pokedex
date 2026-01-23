@@ -1,45 +1,62 @@
-import {attacherEvenementsCartes, getPokemonIndic,currentPage} from './pagination.ts';
+import { attacherEvenementsCartes, getPokemonIndic, currentPage } from './pagination.ts';
+import { fetchNomPokemon } from './api.ts';
 
-export async function rechercherUnPokemon(page: number) {
+// 1. On retire l'argument ici pour utiliser le 'currentPage' importé
+export async function rechercherUnPokemon() {
     const input = document.querySelector<HTMLInputElement>('#search-input');
     const liste = document.querySelector<HTMLUListElement>('#pokemon-list')!;
     const pagination = document.querySelector<HTMLDivElement>('.pagination-controls')!;
     const detail = document.querySelector<HTMLUListElement>('#pokemon-detail')!;
+
     const nom = input?.value.toLowerCase().trim();
     if (!nom) return;
 
-    liste.innerHTML = "Recherche en cours...";
+    liste.innerHTML = "<div class='loading'>Recherche en cours...</div>";
     pagination.style.display = "none";
 
+    // Si une fiche détail était ouverte, on la ferme
+    if(detail) {
+        detail.style.display = "none";
+        detail.innerHTML = "";
+        liste.style.display = "grid";
+    }
+
     try {
-        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${nom}`);
-
-        if (!response.ok) {
-            liste.innerHTML ="Pokémon non trouvé."
-            return;
-        }
-
-        const pokemon = await response.json();
+        const pokemon = await fetchNomPokemon(nom);
 
         liste.innerHTML = `
             <li class="pokemon-card clickable-card" data-name="${pokemon.name}">
-                <span class="pokemon-name">${pokemon.name}</span>
+                <div class="pokemon-name">${pokemon.name}</div>
                 <img src="${pokemon.sprites.other['official-artwork'].front_default}" alt="${pokemon.name}" />
-                <button id="back-btn" class="back-btn">← Retour à la liste</button>
+                <button id="back-btn-search" class="back-btn">← Retour à la liste</button>
             </li>
         `;
 
+        // Réattacher l'événement pour cliquer sur la carte et voir le détail
         attacherEvenementsCartes();
 
-        document.querySelector('#back-btn')?.addEventListener('click', () => {
-            if(liste) liste.style.display = "grid";
-            if(detail) detail.style.display = "none";
-            if(detail) detail.innerHTML = "";
-            if(pagination) pagination.style.display = "flex";
+
+
+        const btnRetour = document.querySelector('#back-btn-search');
+
+        btnRetour?.addEventListener('click', (e) => {
+            e.stopPropagation(); // Empêche de cliquer sur la carte en même temps
+
+
+            getPokemonIndic(currentPage);
         });
 
     } catch (error) {
-        liste.innerHTML = "Une erreur est survenue lors de la recherche.";
+        liste.innerHTML = `
+            <div style="grid-column: 1/-1; color: var(--cb-pink);">
+                ERREUR : Pokémon introuvable.
+                <br><br>
+                <button id="back-btn-error" class="back-btn">Retour</button>
+            </div>`;
+
+        // Gestion du bouton retour même en cas d'erreur
+        document.querySelector('#back-btn-error')?.addEventListener('click', () => {
+            getPokemonIndic(currentPage);
+        });
     }
 }
-

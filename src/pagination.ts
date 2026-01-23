@@ -1,8 +1,7 @@
 // pagination.ts
 import {afficherFicheDetaillee} from  './detail.ts'
+import {fetchListePokemon} from './api.ts'
 import {rechercherUnPokemon} from "./recherche.ts";
-
-// --- AJOUT : On exporte currentPage pour pouvoir l'utiliser dans detail.ts ---
 export let currentPage = 1;
 
 export async function getPokemonIndic(page: number, LIMIT=18) {
@@ -23,11 +22,12 @@ export async function getPokemonIndic(page: number, LIMIT=18) {
         prevBtn.disabled = (page === 1);
     }
 
+    liste.innerHTML = "Chargement..."
+
     const offset = (page - 1) * LIMIT;
+    const catalogue = await fetchListePokemon(offset, LIMIT);
     liste.innerHTML = "Chargement...";
 
-    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${LIMIT}`);
-    const catalogue = await response.json();
 
     const totalPokemon = Math.min(catalogue.count, 1025);
     genererPagination(page, LIMIT, totalPokemon);
@@ -47,7 +47,7 @@ export async function getPokemonIndic(page: number, LIMIT=18) {
 
             liste.innerHTML += `
                 <li class="pokemon-card clickable-card" data-name="${pokemon.name}">
-                    <span class="pokemon-name">${pokemon.name}</span>
+                    <div class="pokemon-name">${pokemon.name}</div>
                     <img src="${pokemon.sprites.other['official-artwork'].front_default}" alt="${pokemon.name}" />
                 </li>
             `;

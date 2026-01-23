@@ -1,26 +1,27 @@
 import './style.css'
-import {retourListe} from "./pagination.ts";
+import { getPokemonIndic } from './pagination.ts'
+import {  rechercherUnPokemon} from './recherche.ts'
 
 
-const app = document.querySelector<HTMLDivElement>('#app')
+let currentPage = 1;
 
-// structure html
-if (app) {
-    app.innerHTML = `
-    <h1>Pokedex</h1>
-    
-    <div class="search-container">
-        <input type="text" id="search-input" placeholder="Chercher un Pokémon (ex: Mewtwo)...">
-        <button id="search-btn">Rechercher</button>
-    </div>
 
-    <ul id="pokemon-list"></ul>
-    <ul id="pokemon-detail"></ul>
-    <div class="pagination-controls">
-        <button id="prev-btn">Précédent</button>
-        <div id="pagination-numbers" class="pagination-numbers"></div>
-        <button id="next-btn">Suivant</button>
-    </div>
-  `
-    retourListe()
-}
+// bouton précédent
+document.querySelector('#prev-btn')?.addEventListener('click', () => {
+    if (currentPage > 1) {
+        currentPage--;
+        getPokemonIndic(currentPage);
+    }
+});
+//bouton suivant
+document.querySelector('#next-btn')?.addEventListener('click', () => {
+    currentPage++;
+    getPokemonIndic(currentPage);
+});
+// Recherche (Clic bouton et Touche Entrée)
+document.querySelector('#search-btn')?.addEventListener('click', rechercherUnPokemon);
+document.querySelector<HTMLInputElement>('#search-input')?.addEventListener('keypress', (e:KeyboardEvent) => {
+    if (e.key === 'Enter') rechercherUnPokemon();
+});
+// Premier chargement
+getPokemonIndic(currentPage);
