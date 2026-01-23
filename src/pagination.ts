@@ -1,7 +1,6 @@
 // pagination.ts
 import {afficherFicheDetaillee} from  './detail.ts'
 import {fetchListePokemon} from './api.ts'
-
 import {rechercherUnPokemon} from "./recherche.ts";
 
 // --- AJOUT : On exporte currentPage pour pouvoir l'utiliser dans detail.ts ---
@@ -137,5 +136,4 @@ export function retourListe() {
         if (e.key === 'Enter') rechercherUnPokemon(0);
     });
 
-    getPokemonIndic(currentPage);
-}
+    getPokemonIndic(currentPage)}

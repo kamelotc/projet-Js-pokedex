@@ -1,4 +1,4 @@
-import {fetchNomPokemonDetail} from './api.ts'
+import {fetchNomPokemon} from './api.ts'
 // detail.ts
 import { getPokemonIndic, currentPage } from "./pagination";
 
@@ -16,7 +16,7 @@ export async function afficherFicheDetaillee(nom: string) {
     detail.innerHTML = "<div class='loading'>CHARGEMENT</div>";
 
     try {
-        const pokemon  = await fetchNomPokemonDetail(nom);
+        const pokemon  = await fetchNomPokemon(nom);
         //const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${nom}`);
         //const pokemon = await res.json();
         const criUrl = pokemon.cries.latest;

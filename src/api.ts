@@ -23,14 +23,3 @@ export async function fetchNomPokemon(nom: string) {
     }
 }
 
-//pour un pokemon detail
-export async function fetchNomPokemonDetail(nom: string) {
-    try {
-        const reponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${nom}`);
-        if (!reponse.ok) throw new Error('Erreur réseau');
-        return await reponse.json();
-    } catch (error){
-        console.error("Erreur API Liste:", error);
-        throw error;
-    }
-}
