@@ -13,12 +13,11 @@ export async function getPokemonIndic(page: number, LIMIT=18) {
     const liste = document.querySelector<HTMLUListElement>('#pokemon-list')!;
     const detail = document.querySelector<HTMLUListElement>('#pokemon-detail')!; // Sélecteur du détail
 
-    // --- MODIFICATION ICI : GESTION DE L'AFFICHAGE ---
-    if(liste) liste.style.display = "grid";   // On réaffiche la grille
-    if(detail) detail.style.display = "none"; // On cache le détail
-    if(detail) detail.innerHTML = "";         // On nettoie le détail précédent
+    if(liste) liste.style.display = "grid";
+    if(detail) detail.style.display = "none";
+    if(detail) detail.innerHTML = "";
     if(pagination) pagination.style.display = "flex";
-    // --------------------------------------------------
+
 
     if (prevBtn) {
         prevBtn.disabled = (page === 1);
@@ -126,7 +125,7 @@ export function retourListe() {
     });
 
     document.querySelector('#search-btn')?.addEventListener('click', () => {
-        // currentPage = 0; // Pas nécessaire de changer currentPage global ici
+
         rechercherUnPokemon(0)
     });
 

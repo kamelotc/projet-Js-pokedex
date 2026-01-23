@@ -4,7 +4,7 @@ export async function rechercherUnPokemon(page: number) {
     const input = document.querySelector<HTMLInputElement>('#search-input');
     const liste = document.querySelector<HTMLUListElement>('#pokemon-list')!;
     const pagination = document.querySelector<HTMLDivElement>('.pagination-controls')!;
-
+    const detail = document.querySelector<HTMLUListElement>('#pokemon-detail')!;
     const nom = input?.value.toLowerCase().trim();
     if (!nom) return;
 
@@ -32,7 +32,10 @@ export async function rechercherUnPokemon(page: number) {
         attacherEvenementsCartes();
 
         document.querySelector('#back-btn')?.addEventListener('click', () => {
-            getPokemonIndic(currentPage);
+            if(liste) liste.style.display = "grid";
+            if(detail) detail.style.display = "none";
+            if(detail) detail.innerHTML = "";
+            if(pagination) pagination.style.display = "flex";
         });
 
     } catch (error) {

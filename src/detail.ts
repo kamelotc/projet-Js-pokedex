@@ -52,7 +52,10 @@ export async function afficherFicheDetaillee(nom: string) {
         if (backBtn) {
             backBtn.addEventListener('click', () => {
                 // On rappelle la fonction principale qui va réafficher la liste et cacher le détail
-                getPokemonIndic(currentPage);
+                if(liste) liste.style.display = "grid";
+                if(detail) detail.style.display = "none";
+                if(detail) detail.innerHTML = "";
+                if(pagination) pagination.style.display = "flex";
             });
         }
 
