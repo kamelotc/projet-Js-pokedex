@@ -23,3 +23,14 @@ export async function fetchNomPokemon(nom: string) {
     }
 }
 
+export async function fetchTousLesPokemons() {
+    try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/?limit=2000`);
+        if (!response.ok) throw new Error('Erreur réseau');
+        return await response.json();
+    } catch (error) {
+        console.error("Erreur API Global:", error);
+        throw error;
+    }
+}
+

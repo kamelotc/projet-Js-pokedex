@@ -1,20 +1,20 @@
+// recherche.ts
 import { attacherEvenementsCartes, getPokemonIndic, currentPage } from './pagination.ts';
-import { fetchNomPokemon } from './api.ts';
+import { fetchTousLesPokemons } from './api.ts'; // On importe la nouvelle fonction
 
-// 1. On retire l'argument ici pour utiliser le 'currentPage' importé
 export async function rechercherUnPokemon() {
     const input = document.querySelector<HTMLInputElement>('#search-input');
     const liste = document.querySelector<HTMLUListElement>('#pokemon-list')!;
     const pagination = document.querySelector<HTMLDivElement>('.pagination-controls')!;
     const detail = document.querySelector<HTMLUListElement>('#pokemon-detail')!;
 
-    const nom = input?.value.toLowerCase().trim();
-    if (!nom) return;
+    const nomRecherche = input?.value.toLowerCase().trim();
+    if (!nomRecherche) return;
 
-    liste.innerHTML = "<div class='loading'>Recherche en cours...</div>";
+    liste.innerHTML = "<div class='loading'>Analyse de la base de données...</div>";
     pagination.style.display = "none";
 
-    // Si une fiche détail était ouverte, on la ferme
+    // Cacher le détail si ouvert
     if(detail) {
         detail.style.display = "none";
         detail.innerHTML = "";
@@ -22,39 +22,58 @@ export async function rechercherUnPokemon() {
     }
 
     try {
-        const pokemon = await fetchNomPokemon(nom);
+        // 1. On récupère la liste complète (très léger en données)
+        const data = await fetchTousLesPokemons();
+        const tousLesPokemons = data.results;
+        const regex = new RegExp(`^${nomRecherche}`, 'i');
+        const resultats = tousLesPokemons.filter((p: any) => regex.test(p.name));
 
-        liste.innerHTML = `
-            <li class="pokemon-card clickable-card" data-name="${pokemon.name}">
-                <div class="pokemon-name">${pokemon.name}</div>
-                <img src="${pokemon.sprites.other['official-artwork'].front_default}" alt="${pokemon.name}" />
-                <button id="back-btn-search" class="back-btn">← Retour à la liste</button>
-            </li>
+        if (resultats.length === 0) {
+            throw new Error("Aucun résultat");
+        }
+
+        liste.innerHTML = "";
+
+        liste.innerHTML += `
+            <div style="grid-column: 1/-1; margin-bottom: 20px;">
+                <button id="back-btn-search" class="back-btn">← Retour à la liste complète</button>
+                <h3 style="color: var(--cb-blue)">${resultats.length} Résultat(s) trouvé(s) pour "${nomRecherche}"</h3>
+            </div>
         `;
 
-        // Réattacher l'événement pour cliquer sur la carte et voir le détail
+
+        resultats.forEach((pokemon: any) => {
+            // Astuce : L'API renvoie l'URL "https://pokeapi.co/api/v2/pokemon/25/"
+            // On découpe l'URL pour récupérer l'ID (ex: 25) sans refaire un appel réseau lent
+            const id = pokemon.url.split('/').filter(Boolean).pop();
+            const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
+
+            liste.innerHTML += `
+                <li class="pokemon-card clickable-card" data-name="${pokemon.name}">
+                    <div class="pokemon-name">${pokemon.name}</div>
+                    <img src="${imageUrl}" alt="${pokemon.name}" loading="lazy" />
+                </li>
+            `;
+        });
+
+        // 4. On réactive le clic sur les cartes pour voir le détail
         attacherEvenementsCartes();
 
-
-
+        // Gestion du bouton retour
         const btnRetour = document.querySelector('#back-btn-search');
-
         btnRetour?.addEventListener('click', (e) => {
-            e.stopPropagation(); // Empêche de cliquer sur la carte en même temps
-
-
-            getPokemonIndic(currentPage);
+            e.stopPropagation();
+            getPokemonIndic(currentPage); // Retour à la page où on était
         });
 
     } catch (error) {
         liste.innerHTML = `
             <div style="grid-column: 1/-1; color: var(--cb-pink);">
-                ERREUR : Pokémon introuvable.
+                ERREUR : Aucun Pokémon ne commence par "${nomRecherche}".
                 <br><br>
                 <button id="back-btn-error" class="back-btn">Retour</button>
             </div>`;
 
-        // Gestion du bouton retour même en cas d'erreur
         document.querySelector('#back-btn-error')?.addEventListener('click', () => {
             getPokemonIndic(currentPage);
         });
