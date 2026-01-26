@@ -23,7 +23,7 @@ export async function rechercherUnPokemon() {
 
         const data = await fetchTousLesPokemons();
         const tousLesPokemons = data.results;
-        const regex = new RegExp(`${nomRecherche}`, 'i');
+        const regex = new RegExp(`^${nomRecherche}`, 'i');
         const resultats = tousLesPokemons.filter((p: any) => regex.test(p.name));
 
         if (resultats.length === 0) {

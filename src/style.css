@@ -200,11 +200,18 @@ h1 {
 }
 
 .detail-view {
-    grid-column: 1 / -1; /* Prend toute la largeur */
-    max-width: 600px;
+    grid-column: 1 / -1;
+    /* CHANGEMENT ICI : On passe de 600px à 1200px pour avoir de la place */
+    max-width: 1200px;
+    width: 95%; /* Prend presque toute la largeur dispo si l'écran est plus petit que 1200px */
+
     margin: 0 auto;
     border: 2px solid var(--cb-yellow) !important;
-    background: rgba(0, 0, 0, 0.9) !important;
+    background: rgba(0, 0, 0, 0.95) !important; /* Un peu plus opaque pour la lisibilité */
+    padding: 30px; /* Un peu plus d'espace interne */
+
+    /* Petite ombre néon pour faire ressortir la grande boîte */
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
 }
 
 .stats-container {
@@ -217,7 +224,7 @@ h1 {
     align-items: center;
     gap: 10px;
     margin-bottom: 8px;
-    font-size: 0.6rem;
+    font-size: 1rem;
 }
 
 .stat-bar {
@@ -319,4 +326,96 @@ h1 {
     );
     background-size: 100% 2px, 3px 100%;
     pointer-events: none;
+}
+.evolution-section {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px dashed var(--cb-blue);
+}
+
+.evo-title {
+    color: var(--cb-pink);
+    font-size: 0.7rem;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.evo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.evo-card {
+    cursor: pointer;
+    text-align: center;
+    transition: transform 0.2s;
+    background: rgba(0, 240, 255, 0.05);
+    padding: 5px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+}
+
+.evo-card:hover {
+    transform: scale(1.1);
+    border-color: var(--cb-yellow);
+    box-shadow: 0 0 10px rgba(252, 238, 10, 0.2);
+}
+
+.evo-card img {
+    width: 60px !important; /* Plus petit que l'image principale */
+    height: 60px;
+    filter: drop-shadow(0 0 5px var(--cb-blue));
+}
+
+.evo-card span {
+    display: block;
+    font-size: 0.6rem;
+    color: var(--cb-blue);
+    text-transform: uppercase;
+    margin-top: 5px;
+}
+
+.arrow {
+    color: var(--cb-yellow);
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-shadow: 0 0 5px var(--cb-pink);
+}
+
+/* Ajustement Flex pour le détail général (optionnel, pour mise en page) */
+.main-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+/* Le conteneur qui englobe Image + Infos */
+.detail-view .main-content {
+    display: flex;             /* Active le mode flexible */
+    flex-direction: row;       /* Force l'alignement horizontal (gauche-droite) */
+    align-items: flex-start;   /* Aligne en haut */
+    justify-content: center;   /* Centre le tout */
+    gap: 50px;                 /* Espace généreux entre l'image et le texte */
+    margin-top: 20px;
+}
+
+/* Force l'image à ne pas prendre toute la place */
+.detail-view .main-img {
+    width: 400px;              /* Largeur fixe confortable pour l'image */
+    max-width: 40%;            /* Sécurité pour ne pas dépasser */
+    height: auto;              /* Hauteur auto pour ne pas étirer */
+    object-fit: contain;
+    filter: drop-shadow(0 0 15px var(--cb-blue));
+}
+
+/* La partie texte prend tout l'espace restant */
+.card-info {
+    flex: 1;                   /* Prend tout l'espace restant à droite */
+    text-align: left;          /* Texte aligné à gauche pour la lisibilité */
+    background: rgba(0, 240, 255, 0.02); /* Fond très subtil */
+    padding: 20px;
+    border: 1px solid var(--cb-blue);
 }

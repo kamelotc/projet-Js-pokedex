@@ -17,7 +17,7 @@ export async function fetchNomPokemon(nom: string) {
         if (!response.ok) throw new Error('Erreur réseau');
         return await response.json();
     } catch (error) {
-        console.error("Erreur API Liste:", error);
+        console.error("Erreur API:", error);
     }
 }
 
@@ -27,7 +27,17 @@ export async function fetchTousLesPokemons() {
         if (!response.ok) throw new Error('Erreur réseau');
         return await response.json();
     } catch (error) {
-        console.error("Erreur API", error);
+        console.error("Erreur API:", error);
+    }
+}
+
+export async function fetchGenericURL(url: string) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Erreur lien API');
+        return await response.json();
+    } catch (error) {
+        console.error("Erreur Fetch URL:", error);
     }
 }
 
