@@ -27,7 +27,7 @@ export async function fetchTousLesPokemons() {
         if (!response.ok) throw new Error('Erreur réseau');
         return await response.json();
     } catch (error) {
-        console.error("Erreur de récupération depuis L'API", error);
+        console.error("Erreur API", error);
     }
 }
 
