@@ -1,7 +1,7 @@
 // detail.ts
 import { fetchNomPokemon, fetchGenericURL } from './api.ts'
 
-export async function afficherFicheDetaillee(nom: string) {
+export async function afficherFicheDetaillee(nomOuId: string | number) {
     const liste = document.querySelector<HTMLUListElement>('#pokemon-list')!;
     const pagination = document.querySelector<HTMLDivElement>('.pagination-controls')!;
     const detail = document.querySelector<HTMLUListElement>('#pokemon-detail')!;
@@ -13,10 +13,10 @@ export async function afficherFicheDetaillee(nom: string) {
     detail.innerHTML = "<div class='loading'>CHARGEMENT DES DONNÉES...</div>";
 
     try {
-        // 1. Info principale
-        const pokemon = await fetchNomPokemon(nom);
+        // 1. Info principale (converti en string au cas où on passe un nombre)
+        const pokemon = await fetchNomPokemon(nomOuId.toString());
 
-        // 2. Info Espèce (pour avoir le lien de la chaîne d'évolution)
+        // 2. Info Espèce
         const species = await fetchGenericURL(pokemon.species.url);
 
         // 3. Info Chaîne d'évolution
@@ -26,10 +26,8 @@ export async function afficherFicheDetaillee(nom: string) {
         const evolutions: any[] = [];
         let currentEvo = evolutionChainData.chain;
 
-        // On parcourt l'arbre (boucle simple pour chaîne linéaire, sinon récursif pour Evoli)
         do {
             const evoDetails = currentEvo.species;
-            // Astuce pour récupérer l'ID depuis l'URL (ex: .../pokemon-species/25/)
             const idPart = evoDetails.url.split('/');
             const id = idPart[idPart.length - 2];
 
@@ -39,11 +37,9 @@ export async function afficherFicheDetaillee(nom: string) {
                 image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`
             });
 
-            // On passe au suivant (on prend le premier enfant pour simplifier)
             currentEvo = currentEvo.evolves_to[0];
         } while (currentEvo !== undefined && currentEvo.hasOwnProperty('species'));
 
-        // Création du HTML des évolutions
         const evoHtml = evolutions.map(evo => `
             <div class="evo-card" onclick="document.dispatchEvent(new CustomEvent('nav-pokemon', {detail: '${evo.name}'}))">
                 <img src="${evo.image}" alt="${evo.name}">
@@ -59,6 +55,13 @@ export async function afficherFicheDetaillee(nom: string) {
                 <div>${s.base_stat}</div>
             </div>
         `).join('');
+
+        // --- CALCUL DES IDs PRÉCÉDENT / SUIVANT ---
+        const currentId = pokemon.id;
+        // Si on est au 1, on retourne au 1025, sinon on recule de 1
+        const prevId = currentId > 1 ? currentId - 1 : 1025;
+        // Si on est au 1025, on retourne au 1, sinon on avance de 1
+        const nextId = currentId < 1025 ? currentId + 1 : 1;
 
         detail.innerHTML = `
             <li class="pokemon-card detail-view">
@@ -78,7 +81,7 @@ export async function afficherFicheDetaillee(nom: string) {
                         </div>
 
                         <div class="evolution-section">
-                            <div class="evo-title">> CHAÎNE D'ÉVOLUTION</div>
+                            <div class="evo-title"> CHAÎNE D'ÉVOLUTION</div>
                             <div class="evo-container">
                                 ${evoHtml}
                             </div>
@@ -87,15 +90,22 @@ export async function afficherFicheDetaillee(nom: string) {
                         <button id="play-cry" class="cry-btn">🔊 Écouter le cri</button>
                     </div>
                 </div>
-                
-                <button id="back-btn" class="back-btn">Retour à la liste</button>
+
+                <div class="navigation-footer">
+                    <button id="btn-prev" class="pokemon-precedent"> < Précédent </button>
+                    <button id="back-btn" class="back-btn">Retour liste</button>
+                    <button id="btn-next" class="pokemon-suivant"> Suivant > </button>
+                </div>
             </li>`;
 
-        // Écouteur pour naviguer via clic sur une évolution
+        // --- GESTION DES ÉVÉNEMENTS ---
+
+        // 1. Navigation évolution
         document.addEventListener('nav-pokemon', (e: any) => {
             afficherFicheDetaillee(e.detail);
-        });
+        }); // Note: Attention aux memory leaks ici si on empile les listeners, mais acceptable pour ce projet simple.
 
+        // 2. Bouton Retour
         const backBtn = document.getElementById('back-btn');
         if (backBtn) {
             backBtn.addEventListener('click', () => {
@@ -106,10 +116,27 @@ export async function afficherFicheDetaillee(nom: string) {
             });
         }
 
+        // 3. Bouton Cri
         const cryBtn = document.getElementById('play-cry');
         if (cryBtn) {
             cryBtn.addEventListener('click', () => {
                 new Audio(pokemon.cries.latest).play();
+            });
+        }
+
+        // 4. Navigation Précédent / Suivant
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+
+        if (btnPrev) {
+            btnPrev.addEventListener('click', () => {
+                afficherFicheDetaillee(prevId);
+            });
+        }
+
+        if (btnNext) {
+            btnNext.addEventListener('click', () => {
+                afficherFicheDetaillee(nextId);
             });
         }
 

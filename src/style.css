@@ -62,6 +62,48 @@ h1 {
     transition: all 0.2s ease;
     display: inline-block;
 }
+.pokemon-precedent{
+    background-color: transparent !important;
+    color: var(--cb-pink) !important;
+    border: 2px solid var(--cb-pink) !important;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 0.8rem;
+    padding: 12px 25px;
+    margin-top: 25px;
+    cursor: pointer;
+    text-transform: uppercase;
+    clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+.pokemon-precedent:hover{
+    background-color: var(--cb-pink) !important;
+    color: var(--cb-dark) !important;
+    box-shadow: 0 0 20px var(--cb-pink);
+    transform: scale(1.05);
+}
+.pokemon-suivant{
+    background-color: transparent !important;
+    color: var(--cb-pink) !important;
+    border: 2px solid var(--cb-pink) !important;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 0.8rem;
+    padding: 12px 25px;
+    margin-top: 25px;
+    cursor: pointer;
+    text-transform: uppercase;
+    clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+.pokemon-suivant:hover{
+    background-color: var(--cb-pink) !important;
+    color: var(--cb-dark) !important;
+    box-shadow: 0 0 20px var(--cb-pink);
+    transform: scale(1.05);
+}
 
 .back-btn:hover {
     background-color: var(--cb-pink) !important;
